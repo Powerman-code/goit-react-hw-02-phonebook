@@ -1,4 +1,7 @@
+import PropTypes from 'prop-types';
 import { Component } from 'react';
+
+import s from './ContactForm.module.css';
 
 export default class ContactForm extends Component {
   state = {
@@ -10,9 +13,31 @@ export default class ContactForm extends Component {
     evt.preventDefault();
     console.log(this.state);
     console.log(evt);
-    this.props.onAddContact(this.state);
-    // this.props.onSubmit(this.state);
+    // this.props.onAddContact(this.state);
+    this.validateData();
+
     this.reset();
+  };
+
+  validateData = () => {
+    const { name, number } = this.state;
+    const { contacts } = this.props;
+    const normalizedFilter = name.toLowerCase();
+    const msg = contacts.find(
+      contact => contact.name.toLowerCase() === normalizedFilter,
+    );
+
+    if (!name || !number) {
+      alert('Введите правильное имя и телефон');
+      return;
+    }
+
+    if (msg) {
+      alert('Taкое имя уже есть');
+      return;
+    } else {
+      this.props.onAddContact(this.state);
+    }
   };
 
   handleNameChange = evt => {
@@ -34,10 +59,11 @@ export default class ContactForm extends Component {
   render() {
     const { name, number } = this.state;
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
+      <form onSubmit={this.handleSubmit} className={s.form}>
+        <label className={s.label}>
           Name
           <input
+            className={s.input}
             type="text"
             name="name"
             value={name}
@@ -45,9 +71,10 @@ export default class ContactForm extends Component {
             onChange={this.handleNameChange}
           ></input>
         </label>
-        <label>
+        <label className={s.label}>
           Number
           <input
+            className={s.input}
             type="tel"
             name="number"
             value={number}
@@ -55,13 +82,15 @@ export default class ContactForm extends Component {
             onChange={this.handleNameChange}
           ></input>
         </label>
-        <button
-          type="submit"
-          // onClick={this.onAddContact}
-        >
+        <button type="submit" className={s.button}>
           Add contact
         </button>
       </form>
     );
   }
 }
+
+ContactForm.propTypes = {
+  onAddContact: PropTypes.func.isRequired,
+  contacts: PropTypes.array.isRequired,
+};

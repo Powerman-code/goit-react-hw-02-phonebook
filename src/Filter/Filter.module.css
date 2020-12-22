@@ -1,0 +1,17 @@
+.button {
+  width: 100px;
+  border-radius: 4px;
+  background-color: rgb(153, 0, 255);
+  color: aliceblue;
+}
+
+.input {
+  margin-left: 15px;
+  border-radius: 4px;
+}
+
+.label {
+  display: flex;
+
+  /* justify-content: space-between; */
+}
